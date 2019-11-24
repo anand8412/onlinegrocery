@@ -383,8 +383,8 @@ a)update constructor
 
 b)remove console.log in registerUser method in ts file and add same in service.
 
-c) make sure u getting values in service.
-
+c) make sure u getting values in service after making call from ts file
+this.userservice.registerUser(userName,password,lastName,firstName,email,age,streetAddress,city,zipcode,state,country);
 
  12) how to create an angular service?
  ans)
