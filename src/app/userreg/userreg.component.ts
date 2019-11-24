@@ -10,6 +10,7 @@ import { UserRegBuisnessServiceService } from '../user-reg-buisness-service.serv
 export class UserregComponent implements OnInit {
 
   angForm: FormGroup;
+  showUserregForm: boolean = true;
 
   constructor(private fb: FormBuilder, private userservice: UserRegBuisnessServiceService) {
     this.createForm();
@@ -35,7 +36,14 @@ export class UserregComponent implements OnInit {
   }
 
   registerUser(userName,password,lastName,firstName,email,age,streetAddress,city,zipcode,state,country) {
-  	this.userservice.registerUser(userName,password,lastName,firstName,email,age,streetAddress,city,zipcode,state,country);
+  	this.userservice.registerUser(userName,password,lastName,firstName,email,age,streetAddress,city,zipcode,state,country).
+    subscribe(res => {
+                      this.showUserregForm = false;
+                      console.log("done");
+                     }
+              );
   }
+ 
 
-}
+ }
+

@@ -1,0 +1,22 @@
+<p><b>Login Page</b></p>
+
+<div class="alert alert-danger" *ngIf="errorMessageExists">{{ errorMessage }}</div>
+        
+
+<div class="card">
+  <div class="card-body">
+     <form [formGroup]="loginForm" novalidate>
+      <div class="form-group">
+        <label class="col-md-4">User Name</label>
+        <input type="text" class="form-control" formControlName="userName" #userName/>
+      </div>
+      <div class="form-group">
+        <label class="col-md-4">Password</label>
+        <input type="text" class="form-control" formControlName="password" #password/>
+      </div>
+	 <div class="form-group">
+        <button (click)="authenticateUser(userName.value,password.value)" class="btn btn-primary">Register</button>
+      </div>
+    </form>
+  </div>
+</div>

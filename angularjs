@@ -1,6 +1,6 @@
 https://appdividend.com/2018/11/04/angular-7-crud-example-mean-stack-tutorial/
-https://app.pluralsight.com/library/courses/typescript/table-of-contents
-
+https://app.pluralsight.com/library/courses/typescript/table-of-contents          // typescript tutorial
+https://getbootstrap.com/docs/4.0/components/alerts/                              // bootstrap alerts         
 
 
 
@@ -369,7 +369,7 @@ d)
       state: state,
       country: country,
     };
-    this.http.post(`http://localhost:8080/reguser`, obj)
+    this.http.post(`http://localhost:8080/signup`, obj)
         .subscribe(res => console.log('Done'));
   }
 
@@ -385,6 +385,272 @@ b)remove console.log in registerUser method in ts file and add same in service.
 
 c) make sure u getting values in service after making call from ts file
 this.userservice.registerUser(userName,password,lastName,firstName,email,age,streetAddress,city,zipcode,state,country);
+
+
+23) create backend to make sure user information is stored in backend.
+ans)
+Create backend code.
+
+Controller:
+@CrossOrigin(origins = "http://localhost:4200")
+  @RequestMapping(value = "/signup", method = RequestMethod.POST)
+  public ResponseEntity<UserForm> save(@RequestBody UserForm userForm) {
+    System.out.println(userForm);
+    UserForm savedUserForm = userRegistrationService.save(userForm);
+      return ResponseEntity.status(HttpStatus.OK).body(savedUserForm);
+  }
+
+Service:
+public UserForm save(UserForm userForm) {
+    User user = new User();
+    BeanUtils.copyProperties(userForm, user);
+    User savedUser = userRegistrationRepository.save(user);
+    userForm.setId(savedUser.getId());
+    return userForm;
+  }
+
+
+24)once you can see user is being created in database. next we have to show user "your account is created successfully"? how can we do that?
+ans)
+
+a) first create the boolean varaiable in userreg ts file to control showing "userform" and "success message"
+showUserregForm: boolean = true;
+
+b) update userreg registeruser method to update the "showUserregForm" to false once user is crreated.
+
+
+  registerUser(userName,password,lastName,firstName,email,age,streetAddress,city,zipcode,state,country) {
+    this.userservice.registerUser(userName,password,lastName,firstName,email,age,streetAddress,city,zipcode,state,country).
+    subscribe(res => {
+                      this.showUserregForm = false;
+                      console.log("done");
+                     }
+              );
+  }
+
+
+  c) also in user service make sure its returning the "promise" instead of logging there.
+
+
+    FROM
+
+    this.http.post(`http://localhost:8080/signup`, obj)
+        .subscribe(res => console.log('Done'));
+
+        TO
+
+    return this.http.post(`http://localhost:8080/signup`, obj);
+
+  d)add html code to show "user created successfully", if user is created properly. and this needs oto be shown only
+  when user is created and not the first time, when you come.
+
+  <div [hidden]="showUserregForm">
+  <div>user registration successfull. Please click below to go to loing page.</div>
+    <a routerLink="login" class="nav-link" routerLinkActive="active">
+            Go to Login page.
+    </a>
+  </div>
+
+
+25) can you add one more link in navigation to go to homepage, if any user wants to go there?
+ans) Add one more li in "app.component.html" as shown below. since if we give empty "" in router link it goes to homepage.
+
+<li class="nav-item">
+        <a routerLink="" class="nav-link" routerLinkActive="active">
+          HomePage
+        </a>
+      </li>
+
+26) add one more link called "Products" in navigation and make sure "products" page is shown once you click on this link.
+for now the product page can show just "Shop Products Below".
+ans)
+
+a) first create "products" component using below command.
+ng g c products --spec=false
+
+b) inside newly created "products.component.html", add below text.
+Shop Products Below
+
+c)create a mapping in "app-routing.module.ts".
+
+import { ProductsComponent } from './products/products.component';
+
+  {
+    path: 'products',
+    component: ProductsComponent
+  }
+
+d)finally add a link for same in navigation.
+<li class="nav-item">
+        <a routerLink="products" class="nav-link" routerLinkActive="active">
+          Products
+        </a>
+</li>
+
+
+27)now if user clicks on login he has to go to login page. that page must have 2 different fields for username and password and must have login button. once he clicks on "login" button make sure to make backend call which return success or failure
+based on user present or not.
+ans)
+
+a)create "login" component using below command.
+ng g c products --spec=false
+
+b) update "app-routing.module.ts" to add a mapping for "login"
+
+import { LoginComponent } from './login/login.component';
+
+  {
+    path: 'login',
+    component: LoginComponent
+  }
+
+c) Make sure navigation is updated to have "login"  router link.
+
+
+d) add a form with two fields there "username" and password. also call "authenticateUser" method in ts file for authentication.
+
+<p><b>Login Page</b></p>
+<div class="card">
+  <div class="card-body">
+     <form [formGroup]="loginForm" novalidate>
+      <div class="form-group">
+        <label class="col-md-4">User Name</label>
+        <input type="text" class="form-control" formControlName="userName" #userName/>
+      </div>
+      <div class="form-group">
+        <label class="col-md-4">Password</label>
+        <input type="text" class="form-control" formControlName="password" #password/>
+      </div>
+   <div class="form-group">
+        <button (click)="authenticateUser(userName.value,password.value)" class="btn btn-primary">Register</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+e) in ts file make sure form is intialized and you have authenticateUser method.
+
+
+1) imports
+import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
+import { UserRegBuisnessServiceService } from '../user-reg-buisness-service.service';
+
+
+
+2)
+ loginForm: FormGroup;
+
+3)
+constructor(private fb: FormBuilder, private userservice: UserRegBuisnessServiceService) {
+    this.createForm();
+  }
+
+4)
+   createForm() {
+    this.loginForm = this.fb.group({
+      userName: [''],
+      password: ['']
+    });
+  }
+
+5)
+  authenticateUser(userName,password) {
+    this.userservice.authenticateUser(userName,password).
+    subscribe(res => {
+                      console.log("done");
+                     }
+              );
+  }
+
+
+f) Now update "user-reg-buisness-service.service.ts" class to make backend call for login.
+ authenticateUser(userName,password) {
+   console.log(userName);
+   console.log(password);
+   
+    const obj = {
+      userName: userName,
+      password: password
+    };
+    return  this.http.post(`http://localhost:8080/authenticateUser`, obj);
+  }
+
+
+28)Create backend code for authenticate user.
+
+
+29) based on what backend code gave in (28), show user "products page" if successful login or "error message" if invalid login.
+ans)
+
+a) In html page add.
+
+
+<div class="alert alert-danger" *ngIf="errorMessageExists">{{ errorMessage }}</div>
+        
+
+b) in ts file add.
+->imports
+import {Router} from '@angular/router';
+
+->inside class
+ loginForm: FormGroup;
+ errorMessageExists: boolean=false;
+ errorMessage: String = "";
+
+constructor(private fb: FormBuilder, private userservice: UserRegBuisnessServiceService,private router: Router) {
+    this.createForm();
+  }
+
+
+  authenticateUser(userName,password) {
+    this.userservice.authenticateUser(userName,password).
+    subscribe(res => {
+                      console.log("done"),
+                      this.router.navigate(['/products']);
+                     },
+              err => {
+                     console.log('HTTP Error', err),
+                    this.errorMessageExists = true,
+                    this.errorMessage = err.error.errorMessage
+                    }
+              );
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
  12) how to create an angular service?
  ans)

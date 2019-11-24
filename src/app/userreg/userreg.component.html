@@ -1,5 +1,5 @@
-<p>User Registration Page</p>
-<div class="card">
+<p><b>User Registration Page</b></p>
+<div [hidden]="!showUserregForm" class="card">
   <div class="card-body">
      <form [formGroup]="angForm" novalidate>
       <div class="form-group">
@@ -52,6 +52,15 @@
       </div>
     </form>
   </div>
+</div>
+
+<div [hidden]="showUserregForm">
+  <div>user registration successfull. Please click below to go to loing page.</div>
+  
+     <a routerLink="/login" class="nav-link" routerLinkActive="active">
+          Go to Login page.
+        </a>
+  
 </div>
 
 

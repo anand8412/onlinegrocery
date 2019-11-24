@@ -9,20 +9,18 @@ export class UserRegBuisnessServiceService {
   constructor(private http: HttpClient) { }
 
 
-   registerUser(userName,password,lastName,firstName,email,age,streetAddress,city,zipcode,state,country) {
+ authenticateUser(userName,password) {
+   console.log(userName);
+   console.log(password);
+   
+    const obj = {
+      userName: userName,
+      password: password
+    };
+    return  this.http.post(`http://localhost:8080/authenticateUser`, obj);
+  }
 
-   	console.log(userName);
-    console.log(password);
-    console.log(lastName);
-    console.log(firstName);
-    console.log(email);
-    console.log(age);
-    console.log(streetAddress);
-    console.log(city);
-    console.log(zipcode);
-    console.log(state);
-    console.log(country);
-    
+   registerUser(userName,password,lastName,firstName,email,age,streetAddress,city,zipcode,state,country) {
     const obj = {
       userName: userName,
       password: password,
@@ -37,7 +35,6 @@ export class UserRegBuisnessServiceService {
       country: country,
     };
 
-    this.http.post(`http://localhost:8080/reguser`, obj)
-        .subscribe(res => console.log('Done'));
+    return  this.http.post(`http://localhost:8080/signup`, obj);
   }
 }
