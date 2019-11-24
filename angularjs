@@ -1,0 +1,404 @@
+https://appdividend.com/2018/11/04/angular-7-crud-example-mean-stack-tutorial/
+https://app.pluralsight.com/library/courses/typescript/table-of-contents
+
+
+
+
+1) what is angualr CLI?
+ans) it is commanlinf line interface tools to Initialize,develop and maintain angualr applications.
+we can invoke angualr CLI tools from command line
+
+2) what is the command to install angualar CLI/
+ans)
+npm install -g @angular/cli
+
+3)how to uninstall older version of angular cli?
+ans)
+npm uninstall -g @angular/cli
+
+4)if you have any questions on angualr CLI command where to check?
+ans)
+ng help
+ng generate --help
+
+here generate is command and --help will give details like why generate command is used.
+
+5) how to create a new angular project using angualar CLI?
+ans)
+ng new my-first-project --skip-git
+cd my-first-project
+
+
+6)how to start angular server?
+ans)
+ng serve -o
+
+first you create project. then you change directory to your project and then you will start the server.
+
+7) by default what port will project created by angular run?
+ans)
+http://localhost:4200/
+
+
+8)which version of angular are you using in your project? what are some old verisons of angular? how to check which version your angular is?
+ans)
+angular 7.  angualr 1.2, angualr 1.4, angualr 2.
+But i know only angular 7.
+
+ng --version
+
+9)where is the source code for first page, you see in browser, when you first start server?
+ans) <projectname>/src/app/app.component.html
+
+10)how to create a new component in angularjs?
+ans)
+ng g c userreg --spec=false
+
+11)how to install other things that angualar wants like bootstrap css framework or some other js framework?
+ans) use npm just like we use for other JS framworks like reactjs.
+npm install bootstrap --save
+
+
+12)how to add new css file into angualr js project?
+ans) add inside angualar.json file in your project directory.
+
+"styles": [
+   "src/styles.css",
+   "node_modules/bootstrap/dist/css/bootstrap.min.css"
+ ],
+
+13)when you create a new compnent say "ng g c userreg --spec=false" what files will be created aby angular cli? Also explain what is the purpose of each file.
+asn)
+inside "<projectname>/src/app/" folder it will create a new folder named "userreg" with three files 
+a)userreg.component.css    //for styles
+b)userreg.component.html  //for html code
+c)userreg.component.ts    //for javascript/typescript code.
+
+14) when you create a new component? will this new component will be added into any configuration details?
+asn)
+a)
+yes the new component will be declared in declrations in "app.module.ts" file. we can see it is imported as shown below
+import { UserregComponent } from './userreg/userreg.component';
+
+b)
+and declared a shown below.
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    UserregComponent
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+
+15)so when you first start application we know the first to be shown is "app.component.html". how to add some navigation to that page. so that we can go to other components by clicking a link in navigation?
+ans)
+well you can just have direct links using link tag "<a>". but you want to use good looking navigation bar. use below.Note that it uses CSS from bootstrap.
+so you need to have bootstrap. Also note that fr those links you need to map to component in "app-routing.module.ts
+
+
+<nav class="navbar navbar-expand-sm bg-light">
+  <div class="container-fluid">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a routerLink="register" class="nav-link" routerLinkActive="active">
+          Register
+        </a>
+      </li>
+      <li class="nav-item">
+        <a routerLink="login" class="nav-link" routerLinkActive="active">
+          Login
+        </a>
+      </li> 
+    </ul>
+  </div>
+</nav>
+
+<div class="container">
+    <router-outlet></router-outlet>
+</div>
+
+16)lets say you have created "userreg" component and now you need to link the "register" link to that component from homepage. how exactly you do that?
+ans)
+
+a) Inside file "app-routing.module.ts" import the component for which you need to go to
+
+import { UserregComponent } from './userreg/userreg.component';
+
+b)Inside the same file there is "routes" list constant. add below JSON object inside the list.
+
+ {
+    path: 'register',
+    component: UserregComponent
+  }
+
+c) basically when you click the link, it will take you to the html page for that component.
+
+
+17) ok thats great that when you click link, it wil show component related to that. but first time when you come screen you need to show something right like homepage. how we do that?
+ans)
+
+a) create something default for home page like "homepage" component
+ng g c homepage --spec=false
+
+b) make sure this component is in modules.
+import { HomepageComponent } from './homepage/homepage.component';
+
+declarations: [
+    AppComponent,
+    UserregComponent
+    ..
+    ..
+    HomepageComponent
+  ],
+
+ c) then in router add a entry for homepagecomponent in "app-routing.module.ts" with '' as its path. make sure you import it. so this will be shown by default when server starts. which will change when you click on link.
+
+ {
+	path: '', 
+	component: UserregComponent
+  },
+
+  d)in homepage compoenent's html page. add something related to homepage.
+
+    <div style="text-align: center;font-size: 50px;">
+      welcome to Online Grocery ppage
+    </div>
+
+18)now we have userreg module. lets plan to add some user registration form details. create html code to create below user registration fields?
+
+username
+password
+firstname
+lastname
+email
+age
+streetaddress
+city
+zipcode
+state
+country
+ans)
+
+a)
+
+<p>User Registration Page</p>
+<div class="card">
+  <div class="card-body">
+     <form [formGroup]="angForm" novalidate>
+      <div class="form-group">
+        <label class="col-md-4">User Name</label>
+        <input type="text" class="form-control" formControlName="userName" />
+      </div>
+      <div class="form-group">
+        <label class="col-md-4">Password</label>
+        <input type="text" class="form-control" formControlName="password" />
+      </div>
+      <div class="form-group">
+        <label class="col-md-4">firstname </label>
+        <input type="text" class="form-control" formControlName="firstName"/>
+      </div>
+      <div class="form-group">
+        <label class="col-md-4">lastname </label>
+        <input type="text" class="form-control" formControlName="lastName"/>
+      </div>
+      <div class="form-group">
+        <label class="col-md-4">email </label>
+        <input type="text" class="form-control" formControlName="email"/>
+      </div>
+      <div class="form-group">
+        <label class="col-md-4">age </label>
+        <input type="text" class="form-control" formControlName="age"/>
+      </div>
+      <div class="form-group">
+        <label class="col-md-4">streetaddress </label>
+        <input type="text" class="form-control" formControlName="streetAddress"/>
+      </div>
+      <div class="form-group">
+        <label class="col-md-4">city </label>
+        <input type="text" class="form-control" formControlName="city"/>
+      </div>
+      <div class="form-group">
+        <label class="col-md-4">zipcode </label>
+        <input type="text" class="form-control" formControlName="zipcode"/>
+      </div>
+       <div class="form-group">
+        <label class="col-md-4">state </label>
+        <input type="text" class="form-control" formControlName="state"/>
+      </div>
+       <div class="form-group">
+        <label class="col-md-4">country </label>
+        <input type="text" class="form-control" formControlName="country"/>
+      </div>
+      <div class="form-group">
+        <button (click)="registerUser('userName.value')" class="btn btn-primary">Register</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+b) we have to make sure we have created the mapping to this formcontrolname is ts file by adding below things.
+1) add imports
+import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
+
+2)define the form name variable
+
+  angForm: FormGroup;
+
+3)in constructor call a new method which builds form group
+
+ constructor(private fb: FormBuilder) {
+    this.createForm();
+  }
+
+4)create the form
+
+ createForm() {
+    this.angForm = this.fb.group({
+      userName: [''],
+      password: [''],
+      lastName: [''],
+      firstName:[''],
+      email: [''],
+      age: [''],
+      streetAddress: [''],
+      city: [''],
+      zipcode: [''],
+      state: [''],
+      country: [''],
+    });
+  }
+
+5)make sure in app.module.ts we have below imports... as it is required for form.
+
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+In imports make sure both of above are added.
+
+imports: [
+    BrowserModule,
+    AppRoutingModule,
+    FormsModule,
+    ReactiveFormsModule
+  ],
+
+
+Now you must be able to see the texbox workign without any errors in console.
+
+
+19) now given that form is ready , make sure when submit button is clicked, we call a method in "userreg.component.ts" and we pass all parameters and the values are logged in console in ts file in some method?
+ans)
+
+a) for all elements in form just add #<fieldname> as shown below for username 
+<input type="text" class="form-control" formControlName="userName" #userName/>
+
+b) in  submit button call the method "registerUser" to be create in ts file by using (click) event.
+ <div class="form-group">
+        <button (click)="registerUser(userName.value,password.value,firstName.value,lastName.value,email.value,age.value,streetAddress.value,
+        city.value,zipcode.value,state.value,country.value)" class="btn btn-primary">Register</button>
+      </div>
+c)add a method in ts file named "registerUser" and log all the field values so that we know we getting values in ts file.
+
+  registerUser(userName,password,lastName,firstName,email,age,streetAddress,city,zipcode,state,country) {
+    console.log(userName);
+    console.log(password);
+    console.log(lastName);
+    console.log(firstName);
+    console.log(email);
+    console.log(age);
+    console.log(streetAddress);
+    console.log(city);
+    console.log(zipcode);
+    console.log(state);
+    console.log(country);
+  }
+
+
+20) create a new service userregbuisnessservice which will make backend calls to save data to DB.Also explain what files will be created .
+also update app.module as unlike component, services are not automatically imported in your modules.
+ans)
+a) run below command
+ng g service userRegBuisnessService --spec=false
+
+b) below file will be created
+src/app/user-reg-buisness-service.service.ts
+
+c)import the UserRegBuisnessServiceService file into the app.module.ts file.
+import { UserRegBuisnessServiceService } from './user-reg-buisness-service.service';
+
+providers: [ UserRegBuisnessServiceService ],
+
+21) create registerUser method in UserRegBuisnessServiceService which must make backend call to insert user into DB?
+ans)
+
+a) in module add httpclientmodule
+import { HttpClientModule } from '@angular/common/http';
+
+ imports: [
+    BrowserModule,
+    AppRoutingModule,
+    FormsModule,
+    ReactiveFormsModule,
+    HttpClientModule
+  ],
+
+b)in service file add below
+import { HttpClient } from '@angular/common/http';
+
+c)update constructor
+constructor(private http: HttpClient) { }
+
+d)
+ registerUser(userName,password,lastName,firstName,email,age,streetAddress,city,zipcode,state,country) {
+    const obj = {
+      userName: userName,
+      password: password,
+      lastName: lastName,
+      firstName: firstName,
+      email: email,
+      age: age,
+      streetAddress: streetAddress,
+      city: city,
+      zipcode: zipcode,
+      state: state,
+      country: country,
+    };
+    this.http.post(`http://localhost:8080/reguser`, obj)
+        .subscribe(res => console.log('Done'));
+  }
+
+22) import UserRegBuisnessServiceService in usercomponent ts file and call registerUser method in service class from there.
+ans)
+a)update constructor
+
+ constructor(private fb: FormBuilder, private bs: UserRegBuisnessServiceService) {
+    this.createForm();
+  }
+
+b)remove console.log in registerUser method in ts file and add same in service.
+
+c) make sure u getting values in service.
+
+
+ 12) how to create an angular service?
+ ans)
+ ng g service business --spec=false
+
+ 13)what is the library to install angular routing progress indicator?
+ ans)
+ npm install ng2-slim-loading-bar --save
+
+ 14)what is the command to solve third party library issues with Angular 7?
+ ans)
+ npm install rxjs-compat --s
+
+
+
+
+

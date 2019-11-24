@@ -1,0 +1,6 @@
+
+
+git init
+git remote add origin https://github.com/anand8412/onlinegrocery.git
+git remote -v
+

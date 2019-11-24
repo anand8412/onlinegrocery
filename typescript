@@ -1,0 +1,337 @@
+1) why we use typescript? why cant we use javascript?
+ans)
+a) javascript code is messy as there is no proper patterns. so tough to maintain. TypeScript makes it more modular. typescript is converted to JS at the end of the day by framework.
+
+b) Java has dynamic type. variables can hold any object. its tough to know what is the type of the variable.
+
+2) what are alternative to Typescript?
+ans)
+a) write pure javascript
+b)apply JS patterns
+c)coffescript
+4)Dart
+
+3)what is typescript?
+ans)
+typescript is typed superset of JS that compiles into plain javascript. (just like java uses assembly langugae at end of the day)
+
+4)what are features of TypeScript?
+ans)
+
+a) supports standard javascript code.
+b) provided static typing
+c) encapsulation through classes and modules.
+d) support for constructors properties functions
+e) define interfaces
+f) support for arrow functions(lambdas)
+
+5)Sample code before and after?
+
+ans)
+
+before:
+
+class Greeter{
+
+greeting: string;              //static typing and encapusaltion
+
+constructor (message: string){
+	this.greeting = message;
+}	
+
+greet(){
+	return "hello " + this.greeting;
+}
+
+}
+
+
+after:
+var Greeter = (function(){
+function Greeter(message){
+	this.greeting = message;
+}
+
+Greeter.prototype.greet = function(){
+	return "hello" + this.greeting;
+};
+return Greeter;	
+})();
+
+6)what are important keywords and operator?
+ans)
+a) class
+b) constructor
+c) exports
+d) extends
+e) implements
+f) imports
+g) interface
+h) module/namespace
+g)public/private
+e) ... -- rest parameter syntax
+k) =>  --- arrow operator
+h)<typename> 
+g) : --- seperatoe between variable/parameternames and types
+
+7) what is code hierarchy?
+ans)
+modules/namespaces
+class
+fields
+constructor
+properties
+functions
+
+8)how to check js equivalent for typescript for debugging purpose?
+ans)
+search google typescript background.
+
+9)how to add sublime support for typescript?
+ans)
+https://stackoverflow.com/questions/38712155/how-to-get-support-of-typescript-with-sublime-text-3
+
+10) can you create sample ts file and conver that into JS and see it works in browser.
+
+a) create a file name car.ts
+class Car{
+	
+	engine: string;
+	constructor(engine: string){
+		this.engine=engine;
+	}
+
+	start(){
+		alert('start' + this.engine);
+	}
+
+	stop(){
+		alert('stop' + this.engine);
+	}
+}
+
+
+window.onload=function(){
+var car = new Car('V8');
+car.start();
+car.stop()
+
+}
+b) make sure it is compiled to JS
+
+c) include the js file into new html page
+
+d) open the html page. you must see the alerts...
+
+11)how to define a variable in typescript?
+ans) 
+
+var num =2;   //  javascript
+var num: number =2; // typescript
+
+12)what will be type if you dont declare anything?
+ans)
+var anand;
+
+it will be type of "any" like "object" in java
+
+13)write a function which takes 3 numbers and return the sum of 3 numbers in typescript? (use typescript playground)
+ans)
+
+function addNumbers(n1:number,n2:number,n3:number){
+  return n1 + n2 + n3;
+}
+var result = addNumbers(4, 5, 6)
+console.log(result);
+
+14)what is dynamic typing and static typing?
+ans)
+dynamic typing dame variable can act as different type.(javascript)
+static typing one variabke can have just one type (java,typescript)
+
+var person;
+person="anand";
+person.substring(1,4);
+
+person =6;
+person.substring(1,4); // failes in run time for dynamic typing. fails in compile time for java/typescript
+
+15)how to use standard variables like "document" in typescript?
+ans)
+declare var document;
+document.title="Hello";
+
+16)below in JS wont give compiler but fails at runtime. how can we fix this 
+in typescript so that we can know in compile time only?
+var person;
+person ='anand';
+console.log(person);
+person ={name:'anand',age:24};
+console.log(person.substring(1,4));
+
+ans)
+just define var person:string; it will then give compiler error at place where we accessing
+substring.
+
+17) what are ambient declarations?
+ans)
+it is used for external dependicies.
+
+lets take soem random software  knockoutjs - data binding libarary forjs.
+
+https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/knockout/index.d.ts
+
+declare car ko:KnockoutStatic
+var name = ko.observable('anand')
+var id = ko.observable(1)
+var guy ={id:id,fullname:name}
+var value :string = guy.fullname; //if we use ts, we get compile time error 
+//thne we can chane to   ar value :string = guy.fullname();
+console.log(value);
+
+
+18)what is Object type (base type) equivalent in typescript?
+ans)
+any
+
+example: 
+var data: any;
+
+
+19)what are primitive types in TS?
+ans)
+number
+boolean
+string
+string[]
+null    -- for setting values
+undefined -- for setting values.
+void
+
+20)guess what will be type of each one in typescript?
+var age: number = 21;      
+var score: number = 34.56;  
+var rating = 99.99 
+var isReady=true 
+var isbald; 
+var name='anand'
+
+ans)
+
+var age: number = 21;      //number
+var score: number = 34.56;  //number
+var rating = 99.99 //number
+var isReady=true //boolean
+var isbald; //type any
+var name='anand' //string
+
+21) if you dont pass any value to varibaled default value will be undefined
+or null?
+ans) for numbers it will be undefined or for "any" and object types like Date
+it will be null
+
+22)give example of object types?
+ans)
+var square ={h:10,w:20} //json object -- TS knows based on type interferene
+var multiply= function(x:number){
+	return x*x;
+}
+console.log(square); //object types
+console.log(mutiply); //function types
+
+
+23)what is lambda equivalent for below function?
+
+var myFunc =function(h: number,w:number){
+	return h*w;
+}
+
+ans)
+var myFunc =(h:number,w:number)=> h*w;
+we skip function and return type.
+
+24) how to provide optional parameter in TS?
+ans)
+
+var hellworld: (name?:string) => void;
+helloworld : (name?:string) => {
+console.log('helllo ') + (name || 'unknown person')
+}
+
+helloworld()
+helloworld('anand')
+
+26)structure of a class?
+ans)
+
+class Car{
+	
+//Fields
+//Constructor
+//Properties
+/Functions
+
+}
+
+class Car{
+	private engine: string;
+	constructor(engine:string){
+		this.engine: engine;
+	}
+
+	start(){
+		return "Started " + this.engine;
+	}
+
+	get engine(): string{
+		return this._engine;
+	}
+
+	set engine(value: string){
+		if (value == undefined) throw 'inavlid input';
+		this._engine=value;
+	}
+}
+
+27) what are complex types?
+ans) it is same as object types in java. we can use our own class and define as type in the code.
+
+class Address{
+	street : string;
+	city: string;
+}
+
+class Car{
+	address: Address;
+	name: string;
+}
+
+28)how to create a new class?
+ans) 
+
+var car = new Car();  // just like in java. if required pass parameters.
+
+29)how to cast in TS?
+ans)
+
+var table: HTMLTableElement= <HTMLTableElement>document.createElement('table');
+
+HTMLTableElement(comes from lib.td.ts library)
+
+document.createElement('table'); return HTMLElement. so we need to cast it.
+
+30)what is interface? 
+ans) it is simialr to java. we can force subclass to implement it.
+
+interface IEngine{
+	
+	start(callback: (startStatus:bool,engineType:string)=>void:void): void
+	stop(callback: (stopStatus:bool,engineType:string)=>void:void): void
+}
+
+
+
+
+
+
+
