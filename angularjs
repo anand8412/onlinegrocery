@@ -1,7 +1,11 @@
 https://appdividend.com/2018/11/04/angular-7-crud-example-mean-stack-tutorial/
-https://app.pluralsight.com/library/courses/typescript/table-of-contents          // typescript tutorial
-https://getbootstrap.com/docs/4.0/components/alerts/                              // bootstrap alerts         
+https://app.pluralsight.com/library/courses/typescript/table-of-contents         // typescript tutorial
+https://getbootstrap.com/docs/4.0/components/alerts/                             // bootstrap alerts     
 
+https://www.jquery-az.com/bootstrap4/demo.php?ex=77.0_2                          //footer example
+https://www.jquery-az.com/4-templates-bootstrap-footer-use-projects/             //footer example
+
+https://www.codeply.com/go/kTGlK9Axdk/bootstrap-4-navbar-center-links-examples //place brand at middle of the header.
 
 
 1) what is angualr CLI?
@@ -168,7 +172,7 @@ declarations: [
   d)in homepage compoenent's html page. add something related to homepage.
 
     <div style="text-align: center;font-size: 50px;">
-      welcome to Online Grocery ppage
+      welcome to Online Grocery page
     </div>
 
 18)now we have userreg module. lets plan to add some user registration form details. create html code to create below user registration fields?
@@ -578,6 +582,42 @@ f) Now update "user-reg-buisness-service.service.ts" class to make backend call 
 
 28)Create backend code for authenticate user.
 
+a)UserRegistrationController:
+
+  @CrossOrigin(origins = "http://localhost:4200")
+  @RequestMapping(value = "/authenticateUser", method = RequestMethod.POST)
+  public ResponseEntity<UserForm> getUserByUserNameAndPassword(@RequestBody UserForm userForm) {
+    System.out.println(userForm);
+    UserForm savedUserForm = userRegistrationService.getUserByUserNameAndPassword(userForm);
+    if (savedUserForm.getErrorMessage() != null) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(savedUserForm);
+    } else {
+      return ResponseEntity.status(HttpStatus.OK).body(savedUserForm);
+    }
+  }
+
+b)UserRegistrationService
+
+  public UserForm getUserByUserNameAndPassword(UserForm userForm) {
+    List<User> users = userRegistrationRepository.getUserByUserNameAndPassword(userForm.getUserName(),
+        userForm.getPassword());
+    if (users.size() != 1) {
+      userForm.setErrorMessage("user/password does not exist");
+      return userForm;
+    } else {
+      User user = users.get(0);
+      BeanUtils.copyProperties(user, userForm);
+      return userForm;
+    }
+
+
+  }
+
+c)UserRegistrationRepository
+
+public List<User> getUserByUserNameAndPassword(String userName,String password);
+
+d) check in postman, if working as expected.
 
 29) based on what backend code gave in (28), show user "products page" if successful login or "error message" if invalid login.
 ans)
@@ -616,6 +656,93 @@ constructor(private fb: FormBuilder, private userservice: UserRegBuisnessService
               );
   }
 
+30) search in google and add good footer to the project.
+ans)
+
+you can search thousand of footers in google. i searched below simple footer from below links.
+https://www.jquery-az.com/bootstrap4/demo.php?ex=77.0_2                          //footer example
+https://www.jquery-az.com/4-templates-bootstrap-footer-use-projects/             //footer example
+
+
+a) in app.component.html add below code:
+
+ <footer class="footer">
+      <div class="container">
+      <p>© chaithanya companies | Privacy Policy | Terms of Service</p>
+      </div>
+    </footer>
+
+
+b)in app.component.css  add below code.
+
+.footer {
+    position: fixed;
+    height: 55px;
+    bottom: 0;
+    color:#fff;
+    padding-top:20px;
+    width: 100%;
+    background: #00003E; 
+    background: -webkit-linear-gradient(to right, #31BDE6, #00003E);  
+    background: linear-gradient(to right, #31BDE6, #00003E); 
+    text-align:center;
+}
+
+
+31)make sure navigation bar is dark. search some good exmples for navbar from google.
+ans)
+
+https://www.codeply.com/go/kTGlK9Axdk/bootstrap-4-navbar-center-links-examples
+
+copy below code in navigation code in "app.component.html" page.
+ 
+<nav class="navbar navbar-dark navbar-expand-md bg-dark justify-content-between">
+    <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-nav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse collapse dual-nav w-50 order-1 order-md-0">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                     <a routerLink="" class="nav-link" >
+                      HomePage
+                      </a>                
+                </li>
+                <li class="nav-item">
+                    <a routerLink="register" class="nav-link" routerLinkActive="active">
+                      Register
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a routerLink="login" class="nav-link" routerLinkActive="active">
+                      Login
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                     <a routerLink="products" class="nav-link" routerLinkActive="active">
+                      Products
+                    </a>
+                </li>
+             
+            </ul>
+        </div>
+        <a href="/" class="navbar-brand mx-auto d-block text-center order-0 order-md-1 w-25">Online grocery</a>
+        <div class="navbar-collapse collapse dual-nav w-50 order-2">
+            <ul class="nav navbar-nav ml-auto">
+                 <li class="nav-item">
+                     <a routerLink="products" class="nav-link" routerLinkActive="active">
+                      Logout
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+
+32)
 
 
 
@@ -642,27 +769,6 @@ constructor(private fb: FormBuilder, private userservice: UserRegBuisnessService
 
 
 
-
-
-
-
-
-
-
-
-
-
- 12) how to create an angular service?
- ans)
- ng g service business --spec=false
-
- 13)what is the library to install angular routing progress indicator?
- ans)
- npm install ng2-slim-loading-bar --save
-
- 14)what is the command to solve third party library issues with Angular 7?
- ans)
- npm install rxjs-compat --s
 
 
 
