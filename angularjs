@@ -7,6 +7,8 @@ https://www.jquery-az.com/4-templates-bootstrap-footer-use-projects/            
 
 https://www.codeply.com/go/kTGlK9Axdk/bootstrap-4-navbar-center-links-examples //place brand at middle of the header.
 
+https://www.intersysconsulting.com/blog/angular-components/
+https://www.youtube.com/watch?v=cPNTKy1Lq9s
 
 1) what is angualr CLI?
 ans) it is commanlinf line interface tools to Initialize,develop and maintain angualr applications.
@@ -742,16 +744,464 @@ copy below code in navigation code in "app.component.html" page.
 
 
 
-32)
+32) now we have to show something in products page in UI. so can you create backend code to get products from database. create some products by writing testcase.
+ans)
+
+Controller:
+
+@CrossOrigin(origins = "http://localhost:4200")
+  @RequestMapping(value = "/getAllProducts", method = RequestMethod.POST)
+  public ResponseEntity<List<ProductForm>> getAllProducts() {
+    return ResponseEntity.status(HttpStatus.OK).body(productService.getAllProducts());
+
+  }
+
+Service:
+
+public ArrayList<ProductForm> getAllProducts() {
+    Iterable<Product> productIterable = productRepository.findAll();
+    ArrayList<ProductForm> productFormList = convertIterableToArrayList(productIterable);
+    return productFormList;
+  }
+  
+  public ArrayList<ProductForm> convertIterableToArrayList(Iterable<Product> productIterable) {
+    ArrayList<ProductForm> productFormList = new ArrayList<ProductForm>();
+    for (Product temp : productIterable) {
+      ProductForm productForm = new ProductForm();
+      BeanUtils.copyProperties(temp, productForm);
+      productFormList.add(productForm);
+    }
+
+    return productFormList;
+  }
+
+entity:
+
+@Entity
+@Table(name = "product")
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class Product {
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Long id;
+  private String name;
+  private String brand;
+  private String imageURL;
+  private long price;
+  private boolean inStock;
+  private int maxQuantity;
+  private String description;
+
+testcase:
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = Application.class)
+public class ProductRepositoryTest {
+
+  @Autowired
+  private ProductRepository prodRepository;
+
+  @Test
+  public void createProducts() {
+
+    Product product1 = new Product();
+    product1.setBrand("lactaid");
+    product1.setDescription("lact aid milk very good");
+    product1.setImageURL("");
+    product1.setInStock(true);
+    product1.setMaxQuantity(20);
+    product1.setName("Lactaid Milk");
+    product1.setPrice(12);
+    
+    Product product2 = new Product();
+    product2.setBrand("nadhini");
+    product2.setDescription("nandhini karnataka id milk very good");
+    product2.setImageURL("");
+    product2.setInStock(true);
+    product2.setMaxQuantity(10);
+    product2.setName("nandhini Milk");
+    product2.setPrice(18);
+    
+  
+    Product product3 = new Product();
+    product3.setBrand("tommy hillfiger");
+    product3.setDescription("best suit for marriages");
+    product3.setImageURL("");
+    product3.setInStock(true);
+    product3.setMaxQuantity(5);
+    product3.setName("tomm hillger suit");
+    product3.setPrice(5000);
+    
+    Product product4 = new Product();
+    product4.setBrand("mac");
+    product4.setDescription("mac airbook laptop config 16 gb");
+    product4.setImageURL("");
+    product4.setInStock(true);
+    product4.setMaxQuantity(32);
+    product4.setName("mac airbook");
+    product4.setPrice(149000);
+    
+    Product product5 = new Product();
+    product5.setBrand("samsung");
+    product5.setDescription("samsung mobile configuration");
+    product5.setImageURL("");
+    product5.setInStock(true);
+    product5.setMaxQuantity(32);
+    product5.setName("samsung mobile");
+    product5.setPrice(30000);
+    
+    Product product6 = new Product();
+    product6.setBrand("nokia");
+    product6.setDescription("nokia mobile configuration");
+    product6.setImageURL("");
+    product6.setInStock(false);
+    product6.setMaxQuantity(32);
+    product6.setName("nokia mobile");
+    product6.setPrice(25000);
+  
+    prodRepository.save(product1);
+    prodRepository.save(product2);
+    prodRepository.save(product3);
+    prodRepository.save(product4);
+    prodRepository.save(product5);
+    prodRepository.save(product6);
+    
+
+  }
+
+}
 
 
+33) create front end code for showing products in front end ?
+ans)
+
+a)create a service name product using "ng g service product"
+
+b)Inside product service have below code.
+
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+@Injectable({
+  providedIn: 'root'
+})
+export class ProductService {
+
+  constructor(private http: HttpClient) { }
+
+  getAllProducts(){
+    
+    console.log("chetu inside ProductService")
+     return this.http.get(`http://localhost:8080/getAllProducts`);
+
+   
+  }
+}
+
+c) inside product component ts file have below code.
+
+import { Component, OnInit } from '@angular/core';
+import { ProductService } from '../product.service';
+import Product from '../product';
+@Component({
+  selector: 'app-products',
+  templateUrl: './products.component.html',
+  styleUrls: ['./products.component.css']
+})
+export class ProductsComponent implements OnInit {
+
+  productsList: any = [];
+
+  constructor(private productService: ProductService) {
+      this.getAllProducts()
+   }
+
+  ngOnInit() {
+  }
 
 
+  getAllProducts(){
+    console.log("chetu inside ProductsComponent")
+    this.productService.getAllProducts().
+    subscribe(res => {
+                      console.log("fetched products");
+                      console.log(res);
+                      this.productsList = res;
+                     }
+              );
+  }
+}
 
 
+d) create a model named "product.ts" in app folder.
+
+export default class Product {
+      id: Number;
+        name: String;
+        brand: String;
+        imageURL: String;
+        price: Number;
+        inStock: boolean;
+        maxQuantity: Number;
+        description: String
+}
+
+e)create following code in product html page.
+
+Shop Products Below
+
+<table class="table table-hover">
+  <tr>
+      <th>id</th>
+      <th>name</th>
+      <th>brand</th>
+      <th>imageURL</th>
+      <th>price</th>
+    <th>inStock</th>
+    <th>maxQuantity</th>
+    <th>description</th>
+    <th>Buy</th>
+  </tr>
+    <tbody>
+      <tr *ngFor="let product of productsList">
+          <td>{{ product.id }}</td>
+          <td>{{ product.name }}</td>
+          <td>{{ product.brand }}</td>
+          <td>{{ product.iamgeURL }}</td>
+          <td>{{ product.price }}</td>
+          <td>{{ product.inStock }}</td>
+          <td>{{ product.maxQuantity }}</td>
+          <td>{{ product.description }}</td>        
+          <td><a [routerLink]="['/add', '2']" class="btn btn-primary">Buy Product</a></td>
+      </tr>
+  </tbody>
+</table>
 
 
+34) now we have footer code in app.component.html page. can you create a seprate compoenent called footer and have the code there and
+include footer.component in the app.component.
+ans)
 
+a)ceate a new component named "footer"
+ng g c footer --spec=false
+
+b)move all footer html code and css from app.compoenent.html to "footer" component.
+
+c)add below code at bottom of the page in app.compoenent.html.
+ <app-footer></app-footer>
+
+
+35)Now we have header code in app.component.html page. can you create a seprate compoenent called header and have the code there and
+include header.component in the app.component.
+
+ans)
+
+a)ceate a new component named "header"
+ng g c header --spec=false
+
+b)move all navigation code html code and css from app.compoenent.html to "header" component.
+
+c)add below code at bottom of the page in app.compoenent.html.
+ <app-header></app-header>
+
+ 36) now when you click on "Buy" button, you need to take user to product detail page and show that particular product details
+ in product detail page. but for now just go to that page and make sure the id is passed in product detail ts file.
+ ans)
+
+ a) ceate a new component named "productdetail" using command "ng g c productdetail --spec=false"
+
+b) then in router add a entry for productdetail in "app-routing.module.ts" with 'productdetail' as its path. 
+{
+path: 'productdetail/:id', 
+  component: ProductdetailComponent
+  }
+
+  c)make sure you pass id in products page as shown below.
+
+<td><a [routerLink]="['/productdetail',product.id]" class="btn btn-primary">Buy Product</a></td>
+
+
+d) now to get id in product details 
+
+import { ActivatedRoute } from '@angular/router'
+
+  constructor(activatedRoute: ActivatedRoute) { 
+      console.log("anand...");
+    console.log(activatedRoute.snapshot.paramMap.get("id"));
+  }
+  
+
+
+37) now since you got id in product detail ts file, make a call to backend to get product details for that id and display 
+thr product details in proecut details html file.
+ans)
+
+for sample prod detail page:
+
+https://bootsnipp.com/snippets/56bAW
+
+BACKEND:
+Controller:
+
+  @CrossOrigin(origins = "http://localhost:4200")
+  @RequestMapping(value = "/getProduct", method = RequestMethod.POST)
+  public ResponseEntity<ProductForm> getProduct(@RequestParam(name = "id") String productId) {
+
+    ProductForm productForm = productService.getProduct(productId);
+    return ResponseEntity.status(HttpStatus.OK).body(productForm);
+
+  }
+
+
+  service:
+
+  public ProductForm getProduct(String productId) {
+    Product product = productRepository.findOne(Long.parseLong(productId));
+    ProductForm form = new ProductForm();
+    BeanUtils.copyProperties(product, form);
+    return form;
+  }
+
+  product detail htnl page:
+
+<h6>Product Detail Page</h6>
+<div class="container">
+    <div class="card">
+      <div class="container-fliud">
+        <div class="wrapper row">
+          <div class="preview col-md-4">
+            <div class="preview-pic tab-content">
+              <div class="tab-pane active" id="pic-1"><img [src]="selectedProduct.imageURL"  width="300" height="300" /></div>
+            </div>
+          </div>
+
+          <div class="details col-md-10">
+            <h3 class="product-title">{{ selectedProduct.name }}</h3>
+            <p class="product-description">{{ selectedProduct.description }}</p>
+            <h4 class="price">current price: <span>RS. {{ selectedProduct.price }}</span></h4>
+            <div class="action">
+              <button class="btn btn-primary" type="button">add to cart</button>
+              <button class="like btn btn-default" type="button"><span class="fa fa-heart"></span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  product details ts file:
+  import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router'
+import { ProductService } from '../product.service';
+import Product from '../product';
+
+@Component({
+  selector: 'app-productdetail',
+  templateUrl: './productdetail.component.html',
+  styleUrls: ['./productdetail.component.css']
+})
+export class ProductdetailComponent implements OnInit {
+
+ selectedProduct: any = {};
+ selectedProductId: String;
+
+  constructor(activatedRoute: ActivatedRoute,private productService: ProductService) { 
+      console.log("anand...");
+    console.log(activatedRoute.snapshot.paramMap.get("id"));
+    this.selectedProductId = activatedRoute.snapshot.paramMap.get("id");
+    this.getProduct();
+  }
+  
+  ngOnInit() {
+
+  }
+
+    getProduct(){
+      console.log("chetu inside ProductsComponent")
+      this.productService.getProduct(this.selectedProductId).
+      subscribe(res => {
+                        console.log("fetched product");
+                        console.log(res);
+                        this.selectedProduct = res;
+                       }
+                );
+    }
+
+}
+
+product service page:
+
+ getProduct (id:String){
+    console.log("chetu inside ProductService")
+     return this.http.get(`http://localhost:8080/getProduct?id=` + id );
+  }
+
+
+  38) there is no back button in product detail page back ot  product screen. can you add back button.?
+  ans)
+  <a [routerLink]="['/products']" class="btn btn-primary">Back to Products screen</a>
+
+
+  39) When user logs in add username in session and show that in header as "welcome username".
+  ans)
+
+  Trick here is we need to pass data between 2 unrellated components. (header and login). we can do that using service and emitter.
+
+  a) create a user service using command "ng g service user"
+
+  b) add below code in that.
+
+import { Injectable, Component, EventEmitter, Output } from '@angular/core';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class UserService {
+
+  @Output() getLoggedInName: EventEmitter<string> = new EventEmitter();
+
+
+  constructor() { }
+
+  setUserTOSession(userName:string){
+    console.log("before emit"),
+    this.getLoggedInName.emit(userName); 
+    console.log("after emit");       
+  }
+}
+
+c) in header component class add below code.
+ ngOnInit() {
+    this.userservice1.getLoggedInName.subscribe(name => this.changeName(name));
+  }
+
+    private changeName(name: string): void {
+      console.log("anandddddddd start");
+        this.userName = name;
+        console.log(name);
+        console.log("anandddddddd end");
+    }
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+
+  d) in login component class set the service variable.
+  
+import:
+import { UserService } from '../user.service';
+
+add below to constructor:
+private userservice1: UserService,
+
+if login in successful add below code:
+this.userservice1.setUserTOSession(userName);
+
+e) finally in header html add below code:
+  <li *ngIf='userName' class="nav-item">
+      <a routerLink="" class="nav-link">
+          welcome {{userName}}  
+      </a>
+  </li>
 
 
 

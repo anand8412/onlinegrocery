@@ -1,0 +1,624 @@
+
+https://app.pluralsight.com/course-player?clipId=6ebae471-38c8-4a42-a617-90779f095fd1
+https://www.fullstack.cafe/blog/angular-8-interview-questions
+
+
+1)what is Angular?
+ans)
+A javascript framework for building client side applications using HMTL,CSS and javascript.
+
+2)why angular?
+ans)
+a) expressive html (if,for loop in HTML using ng tags)
+b) powerful data binding
+c) modular design
+4) built in back end calling support
+
+3)why angular. we had angular js right?
+ans)
+a) built for speed
+b) simplified API, less directives
+c) faster development.
+
+4)what is angular application?
+angular application = list of components with services.
+component = template + class(properties + methods) + metadata
+
+5) what language can be used to write angular application?
+ans)
+a) JS ES 6
+b) Typescript
+
+
+6)what is typescript?
+ans)
+a) open source langugae
+b) superset of java
+c) converts to JS in browser
+d) stringly typed.
+e) Object oriented.
+
+7)what are different editors we can use for Angular coding.
+ans)
+a) Visual Studio / Visual Studio Code
+b) Atom
+c) eclipse
+d) Sublime
+
+8) what are software required to do angular ?
+ans)
+a) nodejs (npm) - package manager to install all libraries
+b) angular CLI - for automated creation of components and start server etc..
+
+9)what is package.json?
+ans)
+it lists all packages required for angular which will be installed by npm.
+you can go to this folder in command prompt and give "npm install". it will
+install all software inside this.
+
+10)how to start server and kill server?
+ans)
+
+start server: ng serve -o
+kill server: ctrl-c or commnd-c
+
+11)what are angular  modules ? 
+ans)
+this is used to organize files. a class is module. u can import as follows.
+
+export class Product{
+}
+
+import {Product} from './product'
+
+12)what is component
+
+template --> view created with HTML + includes binding and directives
+Class --> properties and method, created with Typescript and Logic
+Metadata --> Extra data for angular defined with a decorator.
+
+13) create a simple component class?
+ans)
+
+export class Product{      //export makes others can use.
+	pageTitle: string = 'Anand';
+}
+
+class can have constructor and methods and variables.
+
+14) what is metadata decorator?
+ans)
+it is something like annotation we use in java spring. Like
+@RestController tell spring the class is controller. in similar way
+below annotation tells below class is component.
+
+@Component({
+  selector: 'app-header',
+  templateUrl: './header.component.html',
+  styleUrls: ['./header.component.css']
+})
+
+
+15) what is HTML template.?
+ans) its html code.
+
+16)how do you import an class? 
+ans)you can import youe own class or the classes defined by angular.
+
+import {Product} from './product'
+	or to import @Component decorator use,
+import {Component} from '@angular/core'
+
+17)what is data binding.
+ans)
+
+lets say you have TS file,
+
+import { Component, OnInit } from '@angular/core';
+
+@Component({
+  selector: 'app-header',
+  templateUrl: './header.component.html',
+  styleUrls: ['./header.component.css']
+})
+export class HeaderComponent implements OnInit {
+	userName: string = null;
+  constructor() { 
+	this.userName =sessionStorage.getItem('username');
+  }
+
+  ngOnInit() {
+  }
+
+}
+
+and You have html page
+
+{{userName}}
+
+this is called data binding. we are getting userName from TS file.
+angular make sure the value is avilable in html page.
+
+18)is angular SPA?
+ans) yes. SPA means single page application. we have just one HTML and all calls wont reload the page.
+its just brings the html page and show in main page.
+
+19)what is a directive?
+ans)
+we cna think it has a custom html code added by Angular. or we can define our own angular directive.
+it is used to extend directive.
+
+20)what is the shortcut to open developer tools for debugging?
+ans)
+F12
+
+21) how to debug typescript code?
+ans)
+a) open developer tool - F12
+b) open source tab
+c) under webpack u can see type script
+d) opne the file put breakpoint and then you can test the code.
+
+22) what is difference between inline template and linked template?
+ans) In Metadata decorator we can give inline HTML using "template:" or we can give external
+template file using "templateUrl" whihc is called linked template.
+
+23)how to use component as a directive?
+ans) we can use 'selector' in metadata decorator. if any body want to use below template, they can use selector "<app-header></app-header>"
+
+import { Component, OnInit } from '@angular/core';
+
+@Component({
+  selector: 'app-header',
+  templateUrl: './header.component.html',
+  styleUrls: ['./header.component.css']
+})
+export class HeaderComponent implements OnInit {
+  userName: string = null;
+  constructor() { 
+  this.userName =sessionStorage.getItem('username');
+  }
+
+  ngOnInit() {
+  }
+
+}
+
+24)what is data binding?
+ans) passing data between template and the component's class is called data binding.
+
+25)what is interpolation?
+ans) its one way binding from compnent class into component template.
+code inside double curly braces is called interpolation or template expression. we can do calculation, appending inside interpolation.
+you can also called method from interpolation.
+
+class:
+
+export class Product{      //export makes others can use.
+  pageTitle: string = 'Anand';
+}
+
+
+Template:
+{{pageTitle}}
+
+
+TODO for chetu
+a) use mathmatical expression inside interpolcation
+b) use some variable value from interpolation
+c) use some mehtod output from interpolation.
+
+26) what are structural directive?
+ans)
+its angular built in directive. 
+
+example:
+a) *ngIf
+b) *ngFor
+
+* means structural directive which changes/manipulates the element of the tag for which we put that.
+
+example:
+<div *ngIf='products && products.length'>
+//some code
+</div>
+
+only if there is data then only code inside div is shown.
+
+<div *ngFor='let product of products'>
+{{product.name}}
+{{product.price}}
+</div>
+
+
+TODO Chetu:
+define some hardcoded list in class and use it in template to loop and hwo 
+the data
+also define something in class and use if condition to show it or not in template.
+
+
+27)how did you get ngIf and ngFor directives?
+ans) its defined inbuilt by angular in BrowserModule which wil be imported
+in angular module.
+
+28) what is property binding?
+ans) populating HTML element property value from component class is called prperty binding.
+this is also one way binding.
+
+<img [src]='product.imageUrl' [title]='product.name' [style.width.px]='imageWidth' [style.margin.px]='iamgeMargin'>
+
+here 'product.imageUrl' is template expression whose value is defined in component class.
+note that propery name has to be enclosed in in []
+
+29)what is event binding?
+ans)
+<button (click)='toggleImage()'>
+note that event name "click" has to be enclosed in (). here toggleImage() method has to 
+be defined in component class.
+
+TODO chetu:
+show image and hide image using button  "click"  event and  "*ngIf" directive.
+
+30)what is two way binding?
+ans)
+
+suppose if we have texbox, we want its value to be shown from compoennet class and alos
+if it values is updated in browser by user, i thas to be updated back. this is called
+2 way data binding.
+
+
+In template:
+<input [(ngModel)]='listFilter'>
+
+In Component class:
+export class ListComponent{
+  listFilter: string = 'cart';
+}
+
+31)which module "ngModel" directive is in?
+asn) Formmodule and you need to import it in your component class or
+module file to use that.
+
+32)what are some built-in pipes and why it is used? give example. Also what is pipe chaining?
+ans)Pipes are used for data formatting. below are common pipes and there are many other. check in google.
+date
+number
+decimal
+percent
+currency
+json
+slice
+lowercase
+uppercase
+
+Example:
+In interpplation:  {{product.productCode |  lowercase}}
+In property binding: <img [src]='product.url' [title]='product.name | uppercase' />
+
+Example for pipe chaining:
+{{product.price |  currency | lowercase }}
+
+33) what are pipe parameters?
+ans) some pipe we can specify parameters 
+example:
+
+{{product.price |  currency:'USD':'symbol':'1.2-2' }}
+
+TODO CHetu:
+use piping in one of our project and test it.
+
+34)if there is some data for which we dont have type, like custom type. how u define a type?
+ans)
+we have to use interface.
+
+export interface IProduct{
+productId: number;
+name: string;
+releaseDate: Date  
+}
+}
+
+then you can import it and use it.
+
+35) explain component lifcycle hooks?
+ans)
+OnInit:perform component initalization like bringing some backend data
+
+onChanges: perform action after change to input properties.
+
+onDestroy: perform any clean up
+
+you need to import the methods.
+
+import {Component, onInit} from '@angular/core';
+
+export class ProductsComponent implements OnInit {
+
+ngOnInit() {
+
+}
+
+
+36)how to create a custom pipe?
+ans)
+a) 
+
+import {Pipe,PipeTransform} from '@angular/core';
+
+@Pipe({
+  name:'convertToSpaces'
+})
+export class ConvertToSpacesPipe implements PipeTransform{
+transform(value:string,character:string) : string{
+    return value.replace(character,' ');
+  }
+}
+
+b) TO use it:
+{{prodcut.name | convertToSpaces:'-'}}
+}
+}
+
+c) add the declration to app-module 
+
+37)how to filter a list in angular template page?
+ans)
+a) create a texbox in UI for filtering products.
+b) for that texbox value have a variable in compenent class. have getter and setter. (Basically you select the line with the property, then a Quick Action bulb is shown which you have to click. Then you can generate the getters/setters.)
+c) in setter method make sure u filter the copy of product list along with setter value
+
+38)when to nest the component?
+ans) if the nested component is only small part of the parent component.
+example: star component(rating) in products list component
+
+39)how to use nested component?
+ans) we need to use selector used on metadata decorator of nested component
+as tag in parent component. the child component as to be defined in modules.
+
+
+<app-header></app-header> in app.component.html
+
+40) how to pass data to a nested component?
+ans)
+
+In nest component define @Input().
+
+example: in class
+@Input() rating:number;
+
+example: in html, pass rating as attribute.
+
+<pm-star [rating]='234234'>
+</pm-star>
+
+
+41)how to pass data from nested component back to parent component?
+ans)
+
+//declare eventemitter for the variable data which we need to pass. here notify is event name.
+@Output() notify:EventEmitter<string> = new EventEmitter<string>();   // note the generic syntax where we can pass ant object/data to parent component.
+
+//then whatever value you want to emit, use below code.
+this.notify.emit('anand narappa')
+
+//if you want to trigger the event onClick in child compoenent html page, havea method onClick in your child class compoenent.
+onClick(){
+  this.notify.emit('clicked');
+}
+
+in parent html page:
+
+<pm-star (notify) = 'onchildButtonclicked($event)'>
+</pm-star>
+
+
+so when you click, onclick method is called which creates the event, since notify event was called onNotify will triggered, which will call onNotify(), which can
+be defined in parent compoenent and use it values.
+
+onchildButtonclicked(message:string):void {}
+
+42)how to build a service?
+ans)
+
+ng g service <servicename>
+
+43)how to inject a service into component class?
+ans)
+add to constructor as shown below.
+
+private userservice1: UserService,
+
+44) what is observable and reactive extensions? (RXJS)
+ans)
+
+a) Help manage asynchronous data
+b) subscribe to receive notifications.
+
+
+45)how to declare Observable object?
+ans)
+
+const source$: Observable<number> = range(0,10);
+
+46)wht is Observable?
+ans) Its like JS promise. used to get values.
+
+
+47) difference between Promise and Observable?
+ans)
+
+Promise
+a) Provides a single future value
+b) not lazy
+c) Not cancellable
+
+Observable
+a)EMits mutiple values at time
+b) Lazy
+c) Cancellable
+d)suppirts map,filter,reduce and similar operators
+
+
+48) how to make http request to server?
+ans)
+
+a) import {HttpClient} from '@angular/common/http'
+
+b) inject in constructor
+constructor(){private http:HttpClient}
+
+c) make sure HttpClientModule is added in imports in app.modules.ts
+
+d) make  a call
+this.http.get('http://localhost:8080/getProducts')
+it returns Observable object back for which we need to sunscribe and get the value.
+
+OR we can also define type for eturn type which returns Observable<IProduct>
+this.http.get<IProduct[]>('http://localhost:8080/getProducts')
+
+
+49) how to get value from subscribe?
+ans)
+
+  getAllProducts(){
+    console.log("chetu inside ProductsComponent")
+    this.productService.getAllProducts().
+    subscribe(res => {
+                          this.productsList = res;
+                     }
+              );
+  }
+
+  50) what is safe navigation operator?
+  ans) when accessing product.productName, if product is null or undefined, we get error. we can use
+  product?.productName which will do null check. ? is called safe navigation operator.
+
+
+  51)how to configure router.
+  a)import { AppRoutingModule } from './app-routing.module';  in app.module.ts
+  b)add AppRoutingModule into "imports"
+  c) in app-routing.module.ts add Routes
+
+  const routes: Routes = [
+  {
+  path: '', 
+  component: HomepageComponent
+  },
+   {
+  path: 'productdetail/:id', 
+  component: ProductdetailComponent
+  }
+];
+
+
+52)how to define default route?
+ans)
+{path '', redirectTo:'welcome',pathMatch:'full'}
+
+53)how to define pagenotfoundcomponent. if they give unknown path?
+ans)
+ {
+  path: '**', 
+  component: PageNotFoundComponent
+  }
+
+
+54)how to link routes to user actions like link?
+ans)
+
+<a [routerLink="['/products']"]>product list</a></li>
+
+55)how to pass parameter to routes?
+
+In config:
+ {
+  path: 'productdetail/:id', 
+  component: ProductdetailComponent
+  }
+
+In html:
+<td><a [routerLink]="['/productdetail',product.id]" class="btn btn-primary">Buy Product</a></td>
+
+In component class:
+
+
+  constructor(activatedRoute: ActivatedRoute,private productService: ProductService) { 
+      console.log("anand...");
+    console.log(activatedRoute.snapshot.paramMap.get("id"));
+    this.selectedProductId = activatedRoute.snapshot.paramMap.get("id");
+    this.getProduct();
+  }
+
+  import { ActivatedRoute } from '@angular/router'
+
+56)how to invoke a route in component class rather than html code?
+ans)
+his.router.navigate(['/products']);
+
+57)how to add Guards to Routes as we want to add some restrictions?
+ans)
+
+CanActivate interface.   based on certain conditions.
+CanDeactivate
+Resolve
+CanLoad
+
+58)what are different arrays avaiable in angualr module file?
+ans)
+a)bootstrap array
+b)declrations array
+c)exports array
+d)imports array
+e)providers array
+
+
+59) tell some import commands in ANgualre CLI
+
+ans)
+
+ng new --  for creating new applications
+ng serve -- for starting server
+ng generate -- for generating components/services
+ng test -- for testing
+ng build -- for building applciations
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

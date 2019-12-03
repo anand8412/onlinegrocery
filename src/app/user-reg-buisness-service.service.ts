@@ -10,8 +10,6 @@ export class UserRegBuisnessServiceService {
 
 
  authenticateUser(userName,password) {
-   console.log(userName);
-   console.log(password);
    
     const obj = {
       userName: userName,

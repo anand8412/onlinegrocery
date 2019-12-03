@@ -10,6 +10,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { UserRegBuisnessServiceService } from './user-reg-buisness-service.service';
 import { ProductsComponent } from './products/products.component';
 import { LoginComponent } from './login/login.component';
+import { FooterComponent } from './footer/footer.component';
+import { HeaderComponent } from './header/header.component';
+import { ProductdetailComponent } from './productdetail/productdetail.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +20,10 @@ import { LoginComponent } from './login/login.component';
     UserregComponent,
     HomepageComponent,
     ProductsComponent,
-    LoginComponent
+    LoginComponent,
+    FooterComponent,
+    HeaderComponent,
+    ProductdetailComponent
   ],
   imports: [
     BrowserModule,
@@ -26,7 +32,7 @@ import { LoginComponent } from './login/login.component';
     ReactiveFormsModule,
     HttpClientModule
   ],
-  providers: [UserRegBuisnessServiceService],
+  providers: [UserRegBuisnessServiceService,LoginComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

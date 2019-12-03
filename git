@@ -8,3 +8,9 @@ git commit -m "commit new files"
 git push --set-upstream origin master
 
 
+git init
+git remote add origin https://github.com/anand8412/onlinegrocery_be.git
+git remote -v
+git add .
+git commit -m "commit new files"
+git push --set-upstream origin master

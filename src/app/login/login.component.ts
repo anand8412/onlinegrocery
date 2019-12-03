@@ -1,7 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { OnInit } from '@angular/core';
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 import { UserRegBuisnessServiceService } from '../user-reg-buisness-service.service';
 import {Router} from '@angular/router';
+import { Component } from '@angular/core';
+import { UserService } from '../user.service';
+
 
 @Component({
   selector: 'app-login',
@@ -15,7 +18,7 @@ export class LoginComponent implements OnInit {
  errorMessageExists: boolean=false;
  errorMessage: String = "";
 
-constructor(private fb: FormBuilder, private userservice: UserRegBuisnessServiceService,private router: Router) {
+constructor(private userservice1: UserService,private fb: FormBuilder, private userservice: UserRegBuisnessServiceService,private router: Router) {
     this.createForm();
   }
 
@@ -29,18 +32,20 @@ constructor(private fb: FormBuilder, private userservice: UserRegBuisnessService
   authenticateUser(userName,password) {
   	this.userservice.authenticateUser(userName,password).
     subscribe(res => {
-                      console.log("done"),
+                      this.userservice1.setUserTOSession(userName);
                       this.router.navigate(['/products']);
                      },
               err => {
               		   console.log('HTTP Error', err),
               		  this.errorMessageExists = true,
               		  this.errorMessage = err.error.errorMessage
+
               		  }
               );
   }
 
   ngOnInit() {
   }
+
 
 }

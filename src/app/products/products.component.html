@@ -1,1 +1,29 @@
 Shop Products Below
+
+<table class="table table-hover">
+  <tr>
+      <th>id</th>
+      <th>name</th>
+      <th>brand</th>
+      <th>price</th>
+	  <th>inStock</th>
+	  <th>maxQuantity</th>
+	  <th>description</th>
+	  <th>Buy</th>
+  </tr>
+    <tbody>
+      <tr *ngFor="let product of productsList">
+          <td>{{ product.id }}</td>
+          <td>{{ product.name }}</td>
+          <td>{{ product.brand }}</td>
+          <td>{{ product.price }}</td>
+          <td>{{ product.inStock }}</td>
+          <td>{{ product.maxQuantity }}</td>
+          <td>{{ product.description }}</td>        
+          <td><a [routerLink]="['/productdetail',product.id]" class="btn btn-primary">Buy Product</a></td>
+      </tr>
+  </tbody>
+</table>
+
+
+

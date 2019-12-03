@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-
+import { ProductService } from '../product.service';
+import Product from '../product';
 @Component({
   selector: 'app-products',
   templateUrl: './products.component.html',
@@ -7,9 +8,22 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProductsComponent implements OnInit {
 
-  constructor() { }
+  productsList: any = [];
+
+  constructor(private productService: ProductService) {
+  		this.getAllProducts()
+   }
 
   ngOnInit() {
   }
 
+
+  getAllProducts(){
+  	console.log("chetu inside ProductsComponent")
+  	this.productService.getAllProducts().
+  	subscribe(res => {
+                          this.productsList = res;
+                     }
+              );
+  }
 }
