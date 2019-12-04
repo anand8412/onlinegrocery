@@ -1,0 +1,58 @@
+<p><b>User Profile Details</b></p>
+<div class="card">
+  <div class="card-body">
+     <form [formGroup]="userProfileForm" novalidate> 
+      <div class="form-group">
+        <label class="col-md-4">User Name</label>
+        <input type="text" class="form-control" formControlName="userName" #userName/>
+      </div>
+      <div class="form-group">
+        <label class="col-md-4">Password</label>
+        <input type="text" class="form-control" formControlName="password" #password/>
+      </div>
+      <div class="form-group">
+        <label class="col-md-4">firstname </label>
+        <input type="text" class="form-control" formControlName="firstName" #firstName/>
+      </div>
+      <div class="form-group">
+        <label class="col-md-4">lastname </label>
+        <input type="text" class="form-control" formControlName="lastName" #lastName/>
+      </div>
+      <div class="form-group">
+        <label class="col-md-4">email </label>
+        <input type="text" class="form-control" formControlName="email" #email/>
+      </div>
+      <div class="form-group">
+        <label class="col-md-4">age </label>
+        <input type="text" class="form-control" formControlName="age" #age/>
+      </div>
+      <div class="form-group">
+        <label class="col-md-4">streetaddress </label>
+        <input type="text" class="form-control" formControlName="streetAddress" #streetAddress/>
+      </div>
+      <div class="form-group">
+        <label class="col-md-4">city </label>
+        <input type="text" class="form-control" formControlName="city" #city/>
+      </div>
+      <div class="form-group">
+        <label class="col-md-4">zipcode </label>
+        <input type="text" class="form-control" formControlName="zipcode" #zipcode/>
+      </div>
+       <div class="form-group">
+        <label class="col-md-4">state </label>
+        <input type="text" class="form-control" formControlName="state" #state/>
+      </div>
+       <div class="form-group">
+        <label class="col-md-4">country </label>
+        <input type="text" class="form-control" formControlName="country" #country/>
+      </div>
+      <div class="form-group">
+            <button (click)="updateUser(userName.value,password.value,firstName.value,lastName.value,email.value,age.value,streetAddress.value,
+            city.value,zipcode.value,state.value,country.value,userDetail.id)" class="btn btn-primary">Update</button>
+      </div> 
+    </form> 
+  </div>
+</div>
+<div class="alert alert-success" *ngIf="userMessage">{{ userMessage }}</div>
+
+       

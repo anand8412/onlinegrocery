@@ -11,8 +11,6 @@ export class UserService {
   constructor() { }
 
   setUserTOSession(userName:string){
-    console.log("before emit"),
-    this.getLoggedInName.emit(userName); 
-    console.log("after emit");       
+    this.getLoggedInName.emit(userName);    
   }
 }

@@ -39,7 +39,6 @@ export class UserregComponent implements OnInit {
   	this.userservice.registerUser(userName,password,lastName,firstName,email,age,streetAddress,city,zipcode,state,country).
     subscribe(res => {
                       this.showUserregForm = false;
-                      console.log("done");
                      }
               );
   }

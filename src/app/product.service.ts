@@ -12,7 +12,6 @@ export class ProductService {
   }
 
   getProduct (id:String){
-  	console.log("chetu inside ProductService")
   	 return this.http.get(`http://localhost:8080/getProduct?id=` + id );
   }
 }

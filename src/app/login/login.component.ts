@@ -18,7 +18,8 @@ export class LoginComponent implements OnInit {
  errorMessageExists: boolean=false;
  errorMessage: String = "";
 
-constructor(private userservice1: UserService,private fb: FormBuilder, private userservice: UserRegBuisnessServiceService,private router: Router) {
+constructor(private userservice1: UserService,private fb: FormBuilder, private userservice: UserRegBuisnessServiceService,
+                      private router: Router) {
     this.createForm();
   }
 
@@ -39,7 +40,6 @@ constructor(private userservice1: UserService,private fb: FormBuilder, private u
               		   console.log('HTTP Error', err),
               		  this.errorMessageExists = true,
               		  this.errorMessage = err.error.errorMessage
-
               		  }
               );
   }

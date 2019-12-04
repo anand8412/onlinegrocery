@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { LoginComponent } from '../login/login.component';
 import { Subscription } from 'rxjs';
 import { UserService } from '../user.service';
-
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -15,7 +15,7 @@ export class HeaderComponent implements OnInit , OnDestroy{
   userName: string = null;
   
 
-  constructor(private userservice1: UserService) { 
+  constructor(private userservice1: UserService,private router: Router) { 
     //this.userName = localStorage.getItem('currentUser');
     
   }
@@ -25,12 +25,14 @@ export class HeaderComponent implements OnInit , OnDestroy{
   }
 
     private changeName(name: string): void {
-      console.log("anandddddddd start");
-        this.userName = name;
-        console.log(name);
-        console.log("anandddddddd end");
+        this.userName = name;  
     }
   ngOnDestroy() {
     this.subscription.unsubscribe();
+  }
+
+  logout(){
+    this.userName=null;
+    this.router.navigate(['/']);
   }
 }

@@ -19,7 +19,6 @@ export class ProductsComponent implements OnInit {
 
 
   getAllProducts(){
-  	console.log("chetu inside ProductsComponent")
   	this.productService.getAllProducts().
   	subscribe(res => {
                           this.productsList = res;

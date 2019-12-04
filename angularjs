@@ -920,11 +920,8 @@ export class ProductsComponent implements OnInit {
 
 
   getAllProducts(){
-    console.log("chetu inside ProductsComponent")
     this.productService.getAllProducts().
     subscribe(res => {
-                      console.log("fetched products");
-                      console.log(res);
                       this.productsList = res;
                      }
               );
@@ -1106,8 +1103,6 @@ export class ProductdetailComponent implements OnInit {
  selectedProductId: String;
 
   constructor(activatedRoute: ActivatedRoute,private productService: ProductService) { 
-      console.log("anand...");
-    console.log(activatedRoute.snapshot.paramMap.get("id"));
     this.selectedProductId = activatedRoute.snapshot.paramMap.get("id");
     this.getProduct();
   }
@@ -1117,11 +1112,8 @@ export class ProductdetailComponent implements OnInit {
   }
 
     getProduct(){
-      console.log("chetu inside ProductsComponent")
       this.productService.getProduct(this.selectedProductId).
       subscribe(res => {
-                        console.log("fetched product");
-                        console.log(res);
                         this.selectedProduct = res;
                        }
                 );
@@ -1164,9 +1156,7 @@ export class UserService {
   constructor() { }
 
   setUserTOSession(userName:string){
-    console.log("before emit"),
-    this.getLoggedInName.emit(userName); 
-    console.log("after emit");       
+    this.getLoggedInName.emit(userName);       
   }
 }
 
@@ -1176,10 +1166,7 @@ c) in header component class add below code.
   }
 
     private changeName(name: string): void {
-      console.log("anandddddddd start");
         this.userName = name;
-        console.log(name);
-        console.log("anandddddddd end");
     }
   ngOnDestroy() {
     this.subscription.unsubscribe();
@@ -1203,12 +1190,270 @@ e) finally in header html add below code:
       </a>
   </li>
 
+40) now we have "welcome user" functionality, let now work on logout functionality. when user clicks on logout link,
+we must not see welcome "user" screen and user has to go back to homepage screen. also when we user is never logged in logout 
+button must not be shown.
+ans)
 
 
 
+a) first thing is we must have logout() method in "header.component.ts" 
+it must set userName to null and also redirect to homepage.
 
+import {Router} from '@angular/router';
 
+add "private router: Router" to constructor
 
+add logut method.
+ logout(){
+    this.userName=null;
+        this.router.navigate(['/']);
+  }
+
+b)in header.component.html call this method.
+ <a (click)='logout()' class="nav-link">
+                      Logout
+ </a>
+
+c) now we must show logout  alos when username is present or user is logged in. so change the *ngIf to "ul" which has both
+"welcome user" and logut.
+
+ <ul *ngIf='userName' class="nav navbar-nav ml-auto">
+ 
+                <li  class="nav-item">
+                    <a routerLink="" class="nav-link">
+                        welcome {{userName}}  
+                    </a>
+                </li>
+                <li  class="nav-item">
+                    <a routerLink="profile" class="nav-link">
+                        My Profile
+                    </a>
+                </li>
+                 <li  class="nav-item">
+                     <a (click)='logout()' class="nav-link">
+                      Logout
+                    </a>
+                </li>
+            </ul>
+
+  d) also make sure "welcome user" is not directed to anywhere. its just information.
+
+ <li  class="nav-item">
+                    <a routerLink="#" class="nav-link">
+                        welcome {{userName}}  
+                    </a>
+                </li>
+
+41) if user is logged in there must be link called "my profile" before "welcome user" link. if you click on the link.
+you must be able to see all details of the user in texboxes and there must be update button. if user wants to change any 
+information he can change. Note that he will not be able to change his username field. he can modify any other feilds.
+Do both backend and frontend required for this.
+ans)
+
+a) lets add a link "My profile"
+
+ <li  class="nav-item">
+                        <a  [routerLink]="['/profile',userName]" class="nav-link">
+                            My Profile
+                        </a>
+                </li>
+
+b) lets create a component called profile and add "profile" path in routes. see that we need to pass username as 
+we need to fetch profile details from database.
+ng g c profile --spec=false
+
+ {
+    path: 'profile/:userName', 
+    component: ProfileComponent
+  }
+
+c)remove below from footer component css as below creates alignment issues.
+    position: fixed;
+
+d) in profile html page:
+ <p><b>User Profile Details</b></p>
+<div class="card">
+  <div class="card-body">
+     <form [formGroup]="userProfileForm" novalidate> 
+      <div class="form-group">
+        <label class="col-md-4">User Name</label>
+        <input type="text" class="form-control" formControlName="userName" #userName/>
+      </div>
+      <div class="form-group">
+        <label class="col-md-4">Password</label>
+        <input type="text" class="form-control" formControlName="password" #password/>
+      </div>
+      <div class="form-group">
+        <label class="col-md-4">firstname </label>
+        <input type="text" class="form-control" formControlName="firstName" #firstName/>
+      </div>
+      <div class="form-group">
+        <label class="col-md-4">lastname </label>
+        <input type="text" class="form-control" formControlName="lastName" #lastName/>
+      </div>
+      <div class="form-group">
+        <label class="col-md-4">email </label>
+        <input type="text" class="form-control" formControlName="email" #email/>
+      </div>
+      <div class="form-group">
+        <label class="col-md-4">age </label>
+        <input type="text" class="form-control" formControlName="age" #age/>
+      </div>
+      <div class="form-group">
+        <label class="col-md-4">streetaddress </label>
+        <input type="text" class="form-control" formControlName="streetAddress" #streetAddress/>
+      </div>
+      <div class="form-group">
+        <label class="col-md-4">city </label>
+        <input type="text" class="form-control" formControlName="city" #city/>
+      </div>
+      <div class="form-group">
+        <label class="col-md-4">zipcode </label>
+        <input type="text" class="form-control" formControlName="zipcode" #zipcode/>
+      </div>
+       <div class="form-group">
+        <label class="col-md-4">state </label>
+        <input type="text" class="form-control" formControlName="state" #state/>
+      </div>
+       <div class="form-group">
+        <label class="col-md-4">country </label>
+        <input type="text" class="form-control" formControlName="country" #country/>
+      </div>
+      <div class="form-group">
+            <button (click)="updateUser(userName.value,password.value,firstName.value,lastName.value,email.value,age.value,streetAddress.value,
+            city.value,zipcode.value,state.value,country.value,userDetail.id)" class="btn btn-primary">Update</button>
+      </div> 
+    </form> 
+  </div>
+</div>
+<div class="alert alert-success" *ngIf="userMessage">{{ userMessage }}</div>
+
+e) in profile component class
+
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router'
+import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
+import { UserRegBuisnessServiceService } from '../user-reg-buisness-service.service';
+
+@Component({
+  selector: 'app-profile',
+  templateUrl: './profile.component.html',
+  styleUrls: ['./profile.component.css']
+})
+export class ProfileComponent implements OnInit {
+  userName:string=null;
+  userDetail:any=null;
+  userProfileForm: FormGroup;
+  userMessage:string=null;
+
+  constructor(private fb: FormBuilder, activatedRoute: ActivatedRoute,  private userservice: UserRegBuisnessServiceService) { 
+    this.userMessage=null;
+    this.userName = activatedRoute.snapshot.paramMap.get("userName");
+    this.getUserDetails(this.userName);
+  }
+  
+
+ createForm(userDetail:any) {
+  this.userProfileForm = this.fb.group({
+    userName: [userDetail.userName],
+    password: [userDetail.password],
+    lastName: [userDetail.lastName],
+    firstName:[userDetail.firstName],
+    email: [userDetail.email],
+    age: [userDetail.age],
+    streetAddress: [userDetail.streetAddress],
+    city: [userDetail.city],
+    zipcode: [userDetail.zipcode],
+    state: [userDetail.state],
+    country: [userDetail.country],
+  });
+}
+
+  ngOnInit() {
+  }
+
+  getUserDetails(userName:string){
+    this.userservice.getUserDetails(userName).
+    subscribe(res => {
+                      console.log(res);
+                      this.userDetail = res;
+                      this.createForm(this.userDetail);
+                     }
+              );
+
+  }
+
+  updateUser(userName,password,lastName,firstName,email,age,streetAddress,city,zipcode,state,country,id) {
+  	this.userservice.updateUser(userName,password,lastName,firstName,email,age,streetAddress,city,zipcode,state,country,id).
+    subscribe(res => {
+                      console.log('anand..')
+                      this.createForm(res);
+                      this.userMessage="user updated successfully";
+                     }
+              );
+  }
+
+}
+
+f) in service class
+
+updateUser(userName,password,lastName,firstName,email,age,streetAddress,city,zipcode,state,country,id) {
+    const obj = {
+      id:id,
+      userName: userName,
+      password: password,
+      lastName: lastName,
+      firstName: firstName,
+      email: email,
+      age: age,
+      streetAddress: streetAddress,
+      city: city,
+      zipcode: zipcode,
+      state: state,
+      country: country,
+    };
+
+    return  this.http.post(`http://localhost:8080/signup`, obj);
+  }
+
+  g) In user reg controller
+
+	@CrossOrigin(origins = "http://localhost:4200")
+	@RequestMapping(value = "/getUserDetails", method = RequestMethod.GET)
+	public ResponseEntity<UserForm> getUserDetails(@RequestParam(name = "userName") String userName) {
+		UserForm userForm = userRegistrationService.getUserByUserName(userName);
+		if (userForm.getErrorMessage() != null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(userForm);
+		} else {
+			return ResponseEntity.status(HttpStatus.OK).body(userForm);
+		}
+
+	}
+
+  h) in service:
+  	public UserForm getUserByUserName(String userName) {
+		UserForm userForm = new UserForm();
+		List<User> users = userRegistrationRepository.getUserByUserName(userName);
+		if (users.size() != 1) {
+			userForm.setErrorMessage("user/password does not exist");
+			return userForm;
+		} else {
+			User user = users.get(0);
+			BeanUtils.copyProperties(user, userForm);
+			return userForm;
+		}
+
+	}
+	
+i) in user repository:
+public List<User> getUserByUserName(String userName);
+	
+Now you must see we can update the profile successfully.
+
+42) In products screeen, show products only if user is logged in. otherwise show "Please login to see Products"
+
+ans)
 
 
 
